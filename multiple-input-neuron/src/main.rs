@@ -28,7 +28,7 @@ fn cost(w0: f32, w1: f32) -> f32 {
     for i in 0..DATASET_SIZE {
         let x0= TEST_DATASET[i][0];
         let x1= TEST_DATASET[i][1];
-        let y = x0 * w0 + x1 * w1;
+        let y = sigmoid(x0 * w0 + x1 * w1);
         let diff= y - TEST_DATASET[i][2];
         cost += diff.powf(2.);
     }
