@@ -21,16 +21,17 @@ fn sigma(n: usize) -> f32 {
     result
 }
 
-fn cost(w: f32, size: usize) -> f32 {
+fn cost(w: f32) -> f32 {
+    // size of training data
+    let size = TEST_DATASET.len();
+
     // total score
     let mut cost = 0.0;
 
     // i in amount of iterations
     for i in 0..size {
         let mut x = TEST_DATASET[i][0];
-        let mut y = x*w;
-
-        println!("input: {x}, output: {y}, expected: {}", TEST_DATASET[i][1]);
+        let y = x*w;
         cost += score(TEST_DATASET[i][1], y);
     }
 
@@ -53,22 +54,25 @@ fn main() {
     let mut rng = rand::thread_rng();
     let random_number = rng.gen_range(0.0..=10.0);
 
-    // size of training data
-    let size = TEST_DATASET.len();
     // weight
     let mut w = random_number;
     // bias
     let mut b = 0.0;
 
-    let modi = 1e-1;
+    let modi = 1e-3;
+    let lrate = 1e-3;
 
-    let cost = cost(w, size);
-
-    let iterations = 100;
+    let iterations = 10000;
 
     for i in 0..iterations {
-        sigma(i);
+        let cost_0 = (cost((w + modi)) - cost(w)) / modi;
+        w -= lrate * cost_0;
+
+        println!("cost: {}", cost(w));
     }
 
-    println!("total score: {}", cost);
+    println!("total score: {}", cost(w));
+
+    // Test run
+    println!("{}", w * 50.)
 }
