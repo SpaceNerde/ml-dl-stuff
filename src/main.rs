@@ -1,3 +1,8 @@
+// one neuron with one input
+
+// recoded in rust from https://www.youtube.com/watch?v=PGSba51aRYU
+// credit Tsoding Daily
+
 use rand::Rng;
 
 const TEST_DATASET: [[f32; 2]; 7] =
@@ -74,5 +79,5 @@ fn main() {
     println!("total score: {}", cost(w));
 
     // Test run
-    println!("{}", w * 50.)
+    println!("{}", w * 5000.)
 }
