@@ -15,6 +15,12 @@ const TEST_DATASET: [[f32; 3]; 4] =
 // size of training data
 const DATASET_SIZE: usize = TEST_DATASET.len();
 
+const E: f32 = std::f32::consts::E;
+
+fn sigmoid(x: f32) -> f32 {
+    1. / (1. + E.powf(-x))
+}
+
 fn cost(w0: f32, w1: f32) -> f32 {
     // total score
     let mut cost = 0.0;
@@ -57,4 +63,9 @@ fn main() {
         //println!("cost: {}", cost(w0, w1));
     }
     println!("final cost: {}", cost(w0, w1));
+    println!("-------------");
+    println!("0 and 0: {}", sigmoid(TEST_DATASET[0][0] * w0 + TEST_DATASET[0][1] * w1));
+    println!("1 and 0: {}", sigmoid(TEST_DATASET[1][0] * w0 + TEST_DATASET[1][1] * w1));
+    println!("0 and 1: {}", sigmoid(TEST_DATASET[2][0] * w0 + TEST_DATASET[2][1] * w1));
+    println!("1 and 1: {}", sigmoid(TEST_DATASET[3][0] * w0 + TEST_DATASET[3][1] * w1));
 }
