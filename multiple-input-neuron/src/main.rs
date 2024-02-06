@@ -21,6 +21,7 @@ fn sigmoid(x: f32) -> f32 {
     1. / (1. + E.powf(-x))
 }
 
+// iterate over the matrix and calculate the offset
 fn cost(w0: f32, w1: f32, b: f32) -> f32 {
     // total score
     let mut cost = 0.0;
@@ -48,6 +49,7 @@ fn main() {
     let mut b = rng.gen_range(0.0..=10.0);
     let iterations = 100000;
 
+    // amount of shift
     let modi = 1e-2;
     let lrate = 1e-1;
 
@@ -56,6 +58,7 @@ fn main() {
     for i in 0..iterations {
         let c = cost(w0, w1, b);
 
+        // calculating distance and making a gradient map
         let dw1 = (cost(w0 + modi, w1, b) - c) / modi;
         let dw2 = (cost(w0, w1 + modi, b) - c) / modi;
         let db = (cost(w0, w1, b + modi) - c) / modi;
@@ -66,6 +69,7 @@ fn main() {
 
         //println!("cost: {}", cost(w0, w1));
     }
+    // testing the shit to its maximum
     println!("final cost: {}", cost(w0, w1, b));
     println!("-------------");
     println!("0 and 0: {}", sigmoid(TEST_DATASET[0][0] * w0 + TEST_DATASET[0][1] * w1 + b));
