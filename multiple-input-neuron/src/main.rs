@@ -21,14 +21,14 @@ fn sigmoid(x: f32) -> f32 {
     1. / (1. + E.powf(-x))
 }
 
-fn cost(w0: f32, w1: f32) -> f32 {
+fn cost(w0: f32, w1: f32, b: f32) -> f32 {
     // total score
     let mut cost = 0.0;
     // i in amount of iterations
     for i in 0..DATASET_SIZE {
         let x0= TEST_DATASET[i][0];
         let x1= TEST_DATASET[i][1];
-        let y = sigmoid(x0 * w0 + x1 * w1);
+        let y = sigmoid(x0 * w0 + x1 * w1 + b);
         let diff= y - TEST_DATASET[i][2];
         cost += diff.powf(2.);
     }
@@ -44,28 +44,32 @@ fn main() {
     let mut w0 = rng.gen_range(0.0..=10.0);
     // weight 2
     let mut w1 = rng.gen_range(0.0..=10.0);
-    let iterations = 1000*100;
+    // bias
+    let mut b = rng.gen_range(0.0..=10.0);
+    let iterations = 100000;
 
-    let modi = 1e-3;
-    let lrate = 1e-3;
+    let modi = 1e-2;
+    let lrate = 1e-1;
 
     // println!("weight 1 = {}, weight 2 = {}, cost = {}", w0, w1, cost(w0, w1));
 
     for i in 0..iterations {
-        let c = cost(w0, w1);
+        let c = cost(w0, w1, b);
 
-        let dw1 = (cost(w0 + modi, w1) - c) / modi;
-        let dw2 = (cost(w0, w1 + modi) - c) / modi;
+        let dw1 = (cost(w0 + modi, w1, b) - c) / modi;
+        let dw2 = (cost(w0, w1 + modi, b) - c) / modi;
+        let db = (cost(w0, w1, b + modi) - c) / modi;
 
         w0 -= lrate * dw1;
         w1 -= lrate * dw2;
+        b -= lrate * db;
 
         //println!("cost: {}", cost(w0, w1));
     }
-    println!("final cost: {}", cost(w0, w1));
+    println!("final cost: {}", cost(w0, w1, b));
     println!("-------------");
-    println!("0 and 0: {}", sigmoid(TEST_DATASET[0][0] * w0 + TEST_DATASET[0][1] * w1));
-    println!("1 and 0: {}", sigmoid(TEST_DATASET[1][0] * w0 + TEST_DATASET[1][1] * w1));
-    println!("0 and 1: {}", sigmoid(TEST_DATASET[2][0] * w0 + TEST_DATASET[2][1] * w1));
-    println!("1 and 1: {}", sigmoid(TEST_DATASET[3][0] * w0 + TEST_DATASET[3][1] * w1));
+    println!("0 and 0: {}", sigmoid(TEST_DATASET[0][0] * w0 + TEST_DATASET[0][1] * w1 + b));
+    println!("1 and 0: {}", sigmoid(TEST_DATASET[1][0] * w0 + TEST_DATASET[1][1] * w1 + b));
+    println!("0 and 1: {}", sigmoid(TEST_DATASET[2][0] * w0 + TEST_DATASET[2][1] * w1 + b));
+    println!("1 and 1: {}", sigmoid(TEST_DATASET[3][0] * w0 + TEST_DATASET[3][1] * w1 + b));
 }
